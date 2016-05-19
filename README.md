@@ -1,6 +1,5 @@
 # batchRename
-Rename all files in a folder
-double click rename.bat to excute (*must to put the smae path with other folders)
+Double click rename.bat to excute (*must to put the smae path with other folders)
 
 type your folder name that will rename files
 ```

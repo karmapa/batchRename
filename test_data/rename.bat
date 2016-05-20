@@ -31,14 +31,14 @@ for /L %%i in (1,1,%Filesx%) do (
 		if !num1! lss 10 set newName1=00!num1!b
 		if !num1! geq 10 set newName1=0!num1!b
 		if !num1! geq 100 set newName1=!num1!b
-		ren !list[%%i]! %titleName%%volume%-!newName1!%EXT%
+		ren "!list[%%i]!" %titleName%%volume%-!newName1!%EXT%
 	) else (
 		set /a level2+=1
 		set /a num2=%%i-!level2!
 		if !num2! lss 10 set newName2=00!num2!a
 		if !num2! geq 10 set newName2=0!num2!a
 		if !num2! geq 100 set newName2=!num2!a
-		ren !list[%%i]! %titleName%%volume%-!newName2!%EXT%
+		ren "!list[%%i]!" %titleName%%volume%-!newName2!%EXT%
 	)
 )
 

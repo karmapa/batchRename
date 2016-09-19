@@ -1,5 +1,13 @@
 @echo off
-set /p folder=Please Enter "Folder" name:
+:setFolder
+set /p folder="Please type 'Folder' name:"
+if not exist "%folder%" (
+  echo Error! "%folder%" folder doesn't exist!
+  echo Please type the folder name again!
+  pause
+  goto setFolder
+)
+
 set /p EXT=Please Enter filename Extension(i.e.: .jpg or .tif):
 set /p titleName=Please Enter newName's form, "title" name: 
 set /p volume=Please Enter "Volume" name:

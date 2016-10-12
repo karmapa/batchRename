@@ -21,8 +21,9 @@ if errorlevel 1 goto excute
 setlocal EnableDelayedExpansion
 
 rem Populate the array with existent files in folder
+cd "%folder%"
 set i=0
-for %%a in (%cd%\"%folder%"\*) do (
+for %%a in (*) do (
    set /A i+=1
    set list[!i!]=%%a
 )

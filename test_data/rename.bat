@@ -115,3 +115,6 @@ for /l %%a in (1,1,%filesN%) do (
   set newName=!newNames[%%a]!
   ren "!list[%%a]!" %titleName%%volume%-!newName!%EXT%
 )
+
+pause
+:cancel

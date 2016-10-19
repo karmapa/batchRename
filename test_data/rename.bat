@@ -11,7 +11,11 @@ if not exist "%folder%" (
 set /p EXT=Please Enter filename Extension(example: .jpg or .tif):
 set /p titleName=Please Enter newName's form, "title" name: 
 set /p volume=Please Enter "Volume" name:
-set /p cdPages=Please key in the page number of C,D(Separate pages by "space", example: 100 200):
+echo Please key in C,D page number from small to large
+echo (example:1 15) will get 001c 001d 015c 015d
+echo (wrong example: 15 1) not small to large
+echo (wrong exmaple: 1c 1d) don't key in letters
+set /p cdPages=Please key in here:
 
 choice /C YNC /M "Are you sure rename all files in the %folder%?"
 if errorlevel 3 goto cancel 

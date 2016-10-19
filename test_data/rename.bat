@@ -34,8 +34,13 @@ set filesN=%i%
 set /a cdCount=0
 
 for %%a in (%cdPages%) do (
+
+  for /f "tokens=* delims=0" %%b in ("%%a") do (
+    set /a decNum=%%b
+  )
+
   set /a cdCount+=1
-  set cdPages[!cdCount!]=%%a
+  set cdPages[!cdCount!]=!decNum!
 )
 
 if not defined cdPages[1] (

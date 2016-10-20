@@ -15,8 +15,8 @@ if errorlevel 1 goto renameABCD
 
 :renameABCD
 set /p EXT=Please Enter filename Extension(example: .jpg or .tif):
-set /p titleName="Please key in Title'": 
-set /p volume="Please key in 'Volume' name":
+set /p titleName="Please key in Title':" 
+set /p volume="Please key in 'Volume' name:"
 echo Please key in C,D page number from small to large
 echo (example:1 15) will get 001c 001d 015c 015d
 echo (wrong example: 15 1) not small to large
@@ -24,8 +24,7 @@ echo (wrong exmaple: 1c 1d) don't key in letters
 set /p cdPages=Please key in C,D pages here:
 set /p skipPages=Which pages do you want to skip(small to large page):
 
-choice /C YNC /M "Are you sure rename all files in the %folder%?"
-if errorlevel 3 goto cancel 
+choice /C YN /M "Are you sure to rename files in folder '%folder%'?"
 if errorlevel 2 goto cancel
 if errorlevel 1 goto excute
 
@@ -152,7 +151,12 @@ goto preCancel
 :renameTitleVolumn
 set /p newTitle="Please key in new 'Title':"
 set /p newVolumn="Please key in new 'Volumn' name:"
+
+choice /C YN /M "Are you sure to rename files in folder '%folder%'?" 
+if errorlevel 2 goto cancel
+if errorlevel 1 goto excuteRenameTV
 ::make array of file names in the folder
+:excuteRenameTV
 setlocal EnableDelayedExpansion
 cd "%folder%"
 for %%a in (*) do (

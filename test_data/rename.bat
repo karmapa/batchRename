@@ -1,4 +1,5 @@
 @echo off
+
 :setFolder
 set /p folder="Please type 'Folder' name:"
 if not exist "%folder%" (
@@ -8,9 +9,14 @@ if not exist "%folder%" (
   goto setFolder
 )
 
+choice /C AB /M "(A)rename whole file name. (B)Only rename title and volumn."
+if errorlevel 2 goto renameTitleVolumn
+if errorlevel 1 goto renameABCD
+
+:renameABCD
 set /p EXT=Please Enter filename Extension(example: .jpg or .tif):
-set /p titleName=Please Enter newName's form, "title" name: 
-set /p volume=Please Enter "Volume" name:
+set /p titleName="Please key in Title'": 
+set /p volume="Please key in 'Volume' name":
 echo Please key in C,D page number from small to large
 echo (example:1 15) will get 001c 001d 015c 015d
 echo (wrong example: 15 1) not small to large
@@ -135,11 +141,26 @@ for /l %%a in (1,1,%filesN%) do (
 )
 :newNamesMaked
 
-::rename
+::renameA.B,C,D
 for /l %%a in (1,1,%filesN%) do (
   set newName=!newNames[%%a]!
   ren "!list[%%a]!" %titleName%%volume%-!newName!%EXT%
 )
 
+goto preCancel
+
+:renameTitleVolumn
+set /p newTitle="Please key in new 'Title':"
+set /p newVolumn="Please key in new 'Volumn' name:"
+::make array of file names in the folder
+setlocal EnableDelayedExpansion
+cd "%folder%"
+for %%a in (*) do (
+  set oldTVname=%%a
+  set newTVname=!oldTVname:*-=%newTitle%%newVolumn%-!
+  ren !oldTVname! !newTVname!
+)
+
+:preCancel
 pause
 :cancel

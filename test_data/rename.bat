@@ -15,7 +15,7 @@ if errorlevel 1 goto renameABCD
 
 :renameABCD
 set /p EXT=Please Enter filename Extension(example: .jpg or .tif):
-set /p titleName="Please key in Title':" 
+set /p titleName="Please key in 'Title':" 
 set /p volume="Please key in 'Volume' name:"
 echo Please key in C,D page number from small to large
 echo (example:1 15) will get 001c 001d 015c 015d

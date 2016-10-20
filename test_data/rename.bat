@@ -62,58 +62,48 @@ set /a countDown=%filesN%
 for /l %%a in (1,1,%filesN%) do (
   if !countDown! leq 0 goto newNamesMaked
   set /a newNameI+=1
+  ::make a,b page names
+  if %%a lss 10 (
+    set newNames[!newNameI!]=00%%aa
+    set /a newNameI+=1
+    set newNames[!newNameI!]=00%%ab
+    ) 
+  if %%a geq 10 (
+    if %%a lss 100 (
+      set newNames[!newNameI!]=0%%aa
+      set /a newNameI+=1
+      set newNames[!newNameI!]=0%%ab
+    )
+  )
+  if %%a geq 100 (
+    set newNames[!newNameI!]=%%aa
+    set /a newNameI+=1
+    set newNames[!newNameI!]=%%ab
+  )
+  set /a countDown-=2
+  ::make c,d page names
   if %%a equ !cdPage! (
+    set /a newNameI+=1
     set /a cdPageI+=1
     if defined cdPages[!cdPageI!] (
       call set /a cdPage=%%cdPages[!cdPageI!]%%
     )
     if %%a lss 10 (
-      set newNames[!newNameI!]=00%%aa
-      set /a newNameI+=1
-      set newNames[!newNameI!]=00%%ab
-      set /a newNameI+=1
       set newNames[!newNameI!]=00%%ac
       set /a newNameI+=1
       set newNames[!newNameI!]=00%%ad
     )
     if %%a geq 10 (
       if %%a lss 100 (
-        set newNames[!newNameI!]=0%%aa
-        set /a newNameI+=1
-        set newNames[!newNameI!]=0%%ab
-        set /a newNameI+=1
         set newNames[!newNameI!]=0%%ac
         set /a newNameI+=1
         set newNames[!newNameI!]=0%%ad
       )
     )
     if %%a geq 100 (
-      set newNames[!newNameI!]=%%aa
-      set /a newNameI+=1
-      set newNames[!newNameI!]=%%ab
-      set /a newNameI+=1
       set newNames[!newNameI!]=%%ac
       set /a newNameI+=1
       set newNames[!newNameI!]=%%ad
-    )
-    set /a countDown-=4
-  ) else (
-    if %%a lss 10 (
-      set newNames[!newNameI!]=00%%aa
-      set /a newNameI+=1
-      set newNames[!newNameI!]=00%%ab
-    ) 
-    if %%a geq 10 (
-      if %%a lss 100 (
-        set newNames[!newNameI!]=0%%aa
-        set /a newNameI+=1
-        set newNames[!newNameI!]=0%%ab
-      )
-    )
-    if %%a geq 100 (
-      set newNames[!newNameI!]=%%aa
-      set /a newNameI+=1
-      set newNames[!newNameI!]=%%ab
     )
     set /a countDown-=2
   )

@@ -15,7 +15,8 @@ echo Please key in C,D page number from small to large
 echo (example:1 15) will get 001c 001d 015c 015d
 echo (wrong example: 15 1) not small to large
 echo (wrong exmaple: 1c 1d) don't key in letters
-set /p cdPages=Please key in here:
+set /p cdPages=Please key in C,D pages here:
+set /p skipPages=Which pages do you want to skip(small to large page):
 
 choice /C YNC /M "Are you sure rename all files in the %folder%?"
 if errorlevel 3 goto cancel 
@@ -24,7 +25,6 @@ if errorlevel 1 goto excute
 
 :excute
 setlocal EnableDelayedExpansion
-
 ::make array of file names in the folder
 cd "%folder%"
 set i=0
@@ -33,7 +33,6 @@ for %%a in (*) do (
    set list[!i!]=%%a
 )
 set filesN=%i%
-
 ::make array of c,d pages
 set /a cdCount=0
 
@@ -54,58 +53,84 @@ if not defined cdPages[1] (
   set /a cdPageI=1
   call set /a cdPage=%%cdPages[!cdPageI!]%%
 )
+::make array of skipPages
+set /a skipCount=0
 
+for %%a in (%skipPages%) do (
+  if %%a geq 1 (
+    for /f "tokens=* delims=0" %%b in ("%%a") do (
+      set /a decNum2=%%b
+    )
+
+    set /a skipCount+=1
+    set skipPages[!skipCount!]=!decNum2!
+  )
+)
+
+if not defined skipPages[1] (
+  set skipPage=noPage
+) else (
+  set /a skipPageI=1
+  call set /a skipPage=%%skipPages[!skipPageI!]%%
+)
 ::make array of new names
 set /a newNameI=0
 set /a countDown=%filesN%
 
 for /l %%a in (1,1,%filesN%) do (
   if !countDown! leq 0 goto newNamesMaked
-  set /a newNameI+=1
-  ::make a,b page names
-  if %%a lss 10 (
-    set newNames[!newNameI!]=00%%aa
-    set /a newNameI+=1
-    set newNames[!newNameI!]=00%%ab
-    ) 
-  if %%a geq 10 (
-    if %%a lss 100 (
-      set newNames[!newNameI!]=0%%aa
-      set /a newNameI+=1
-      set newNames[!newNameI!]=0%%ab
+  if %%a equ !skipPage! (
+    set /a skipPageI+=1
+    if defined skipPages[!skipPageI!] (
+      call set /a skipPage=%%skipPages[!skipPageI!]%%
     )
-  )
-  if %%a geq 100 (
-    set newNames[!newNameI!]=%%aa
+  ) else (
     set /a newNameI+=1
-    set newNames[!newNameI!]=%%ab
-  )
-  set /a countDown-=2
-  ::make c,d page names
-  if %%a equ !cdPage! (
-    set /a newNameI+=1
-    set /a cdPageI+=1
-    if defined cdPages[!cdPageI!] (
-      call set /a cdPage=%%cdPages[!cdPageI!]%%
-    )
+    ::make a,b page names
     if %%a lss 10 (
-      set newNames[!newNameI!]=00%%ac
+      set newNames[!newNameI!]=00%%aa
       set /a newNameI+=1
-      set newNames[!newNameI!]=00%%ad
-    )
+      set newNames[!newNameI!]=00%%ab
+    ) 
     if %%a geq 10 (
       if %%a lss 100 (
-        set newNames[!newNameI!]=0%%ac
+        set newNames[!newNameI!]=0%%aa
         set /a newNameI+=1
-        set newNames[!newNameI!]=0%%ad
+        set newNames[!newNameI!]=0%%ab
       )
     )
     if %%a geq 100 (
-      set newNames[!newNameI!]=%%ac
+      set newNames[!newNameI!]=%%aa
       set /a newNameI+=1
-      set newNames[!newNameI!]=%%ad
+      set newNames[!newNameI!]=%%ab
     )
     set /a countDown-=2
+    ::make c,d page names
+    if %%a equ !cdPage! (
+      set /a newNameI+=1
+      set /a cdPageI+=1
+      if defined cdPages[!cdPageI!] (
+        call set /a cdPage=%%cdPages[!cdPageI!]%%
+      )
+      if %%a lss 10 (
+        set newNames[!newNameI!]=00%%ac
+        set /a newNameI+=1
+        set newNames[!newNameI!]=00%%ad
+      )
+      if %%a geq 10 (
+        if %%a lss 100 (
+          set newNames[!newNameI!]=0%%ac
+          set /a newNameI+=1
+          set newNames[!newNameI!]=0%%ad
+        )
+      )
+      if %%a geq 100 (
+        set newNames[!newNameI!]=%%ac
+        set /a newNameI+=1
+        set newNames[!newNameI!]=%%ad
+      )
+      set /a countDown-=2
+    )
   )
 )
 :newNamesMaked

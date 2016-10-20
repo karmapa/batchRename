@@ -9,7 +9,8 @@ choose how to rename
 ```
 (A)rename whole file name. (B)Only rename title and volumn.
 ```
-if choose (A), then
+# if choose (A), then
+
 type your filename extension `.jpg` 
 ```
 Please Enter filename Extension(i.e.: .jpg or .tif):
@@ -32,15 +33,24 @@ Which pages do you want to skip(small to large page)
 ```
 
 The result will become:
-i.e. lj001-001a.jpg
-	 lj001-001b.jpg
-	 lj001-002a.jpg
-	 	.
-	 	.
-	 	.
+
+e.g. 
+
+lj001-001a.jpg
+
+lj001-001b.jpg
+	 
+lj001-002a.jpg
+
+.
+
+.
+
+.
 
 
-if choose (B), then
+# if choose (B), then
+
 only rename the part before '-' 
 
 type the new starting part of files' names
@@ -52,6 +62,8 @@ type the new Volumn number
 Please key in new 'Volumn' name:
 ```
 
-the file name will change from 
+the file name will change from
+
 oldTitleVolumn-001a.jpg to
+
 newTitleVolumn-001a.jpg

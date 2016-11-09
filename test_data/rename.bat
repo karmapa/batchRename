@@ -17,6 +17,8 @@ if errorlevel 1 goto renameABCD
 set /p EXT=Please Enter filename Extension(example: .jpg or .tif):
 set /p titleName="Please key in 'Title':" 
 set /p volume="Please key in 'Volume' name:"
+set /a firstPage=1
+set /p firstPage="Pleade key in 'First' page number:"
 echo Please key in C,D page number from small to large
 echo (example:1 15) will get 001c 001d 015c 015d
 echo (wrong example: 15 1) not small to large
@@ -81,8 +83,9 @@ if not defined skipPages[1] (
 ::make array of new names
 set /a newNameI=0
 set /a countDown=%filesN%
+set /a finalPage=%firstPage%+%filesN%
 
-for /l %%a in (1,1,%filesN%) do (
+for /l %%a in (%firstPage%,1,%finalPage%) do (
   if !countDown! leq 0 goto newNamesMaked
   if %%a equ !skipPage! (
     set /a skipPageI+=1

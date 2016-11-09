@@ -23,6 +23,10 @@ type the volume number
 ```
 Please key in 'Volume' name:
 ```
+type the page number of first page
+```
+Please key in 'First' page number:
+```
 type the pages number that need to be named 'c' and 'd'
 ```
 Please key in C,D pages here:

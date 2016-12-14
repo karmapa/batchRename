@@ -9,9 +9,13 @@ if not exist "%folder%" (
   goto setFolder
 )
 
-choice /C AB /M "(A)rename whole file name. (B)Only rename title and volumn."
+choice /C ab /M "(a)a,b,c,d in one folder (b)change title and volumn in one folder (c)a,b in every sub-folder"
+if errorlevel 3 goto renameMultiAB
 if errorlevel 2 goto renameTitleVolumn
 if errorlevel 1 goto renameABCD
+
+:renameMultiAB
+goto preCancel
 
 :renameABCD
 set /p EXT=Please Enter filename Extension(example: .jpg or .tif):

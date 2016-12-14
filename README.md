@@ -7,9 +7,9 @@ Please Enter "Folder" name:
 ```
 choose how to rename
 ```
-(A)rename whole file name. (B)Only rename title and volumn.
+(a)a,b,c,d in one folder (b)change title and volumn in one folder (c)a,b in every sub-folder
 ```
-# if choose (A), then
+# if choose (a), then
 
 type your filename extension `.jpg` 
 ```
@@ -53,7 +53,7 @@ lj001-002a.jpg
 .
 
 
-# if choose (B), then
+# if choose (b), then
 
 only rename the part before '-' 
 
@@ -71,3 +71,22 @@ the file name will change from
 oldTitleVolumn-001a.jpg to
 
 newTitleVolumn-001a.jpg
+
+# if choose (c), then 
+
+type your filename extension `.jpg`
+```
+Please Enter filename Extension(i.e.: .jpg or .tif):
+```
+
+every image in the sub-folders of the main folder, which you just type in the command line in the beginning, will be renamed by the name of sub-folder
+
+if there are two sub-folders in the main folder: folderA folderB
+
+the images in folderA will be renamed as:
+
+folderA-001a, folderA-001b, folderA-002a, folderA002b ......
+
+the images in folderA will be renamed as:
+
+folderB-001a, folderB-001b, folderB-002a, folderB002b ......

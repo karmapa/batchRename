@@ -28,15 +28,24 @@ set /p skipPages=Which pages do you want to skip(small to large page):
 
 choice /C YN /M "Are you sure to rename files in folder '%folder%'?"
 if errorlevel 2 goto cancel
-if errorlevel 1 goto excute
+if errorlevel 1 call :excute %folder% %EXT% %titleName% %volume% %firstPage% %cdPages% %skipPages%
+goto preCancel
 
 :excute
 setlocal EnableDelayedExpansion
+::set arguments
+set folder=%1
+set EXT=%2
+set titleName=%3
+set volume=%4
+set /a firstPage=%5
+set cdPages=%6
+set skipPages=%7
 ::make array of file names in the folder
 cd "%folder%"
 set i=0
 for %%a in (*) do (
-   set /A i+=1
+   set /a i+=1
    set list[!i!]=%%a
 )
 set filesN=%i%
@@ -148,8 +157,7 @@ for /l %%a in (1,1,%filesN%) do (
   set newName=!newNames[%%a]!
   ren "!list[%%a]!" %titleName%%volume%-!newName!%EXT%
 )
-
-goto preCancel
+Exit /b
 
 :renameTitleVolumn
 set /p newTitle="Please key in new 'Title':"

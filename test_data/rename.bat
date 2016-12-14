@@ -9,12 +9,22 @@ if not exist "%folder%" (
   goto setFolder
 )
 
-choice /C ab /M "(a)a,b,c,d in one folder (b)change title and volumn in one folder (c)a,b in every sub-folder"
+choice /C abc /M "(a)a,b,c,d in one folder (b)change title and volumn in one folder (c)a,b in every sub-folder"
 if errorlevel 3 goto renameMultiAB
 if errorlevel 2 goto renameTitleVolumn
 if errorlevel 1 goto renameABCD
 
 :renameMultiAB
+setlocal EnableDelayedExpansion
+set /p EXT=Please Enter filename Extension(example: .jpg or .tif):
+set /a firstPage=1
+cd "%folder%"
+set i=0
+for /f %%f in ('dir /a:d /b') do (
+  set folder=%%f
+  set titleName=%%f
+  call :excute
+)
 goto preCancel
 
 :renameABCD
@@ -32,19 +42,11 @@ set /p skipPages=Which pages do you want to skip(small to large page):
 
 choice /C YN /M "Are you sure to rename files in folder '%folder%'?"
 if errorlevel 2 goto cancel
-if errorlevel 1 call :excute %folder% %EXT% %titleName% %volume% %firstPage% %cdPages% %skipPages%
+if errorlevel 1 call :excute
 goto preCancel
 
 :excute
 setlocal EnableDelayedExpansion
-::set arguments
-set folder=%1
-set EXT=%2
-set titleName=%3
-set volume=%4
-set /a firstPage=%5
-set cdPages=%6
-set skipPages=%7
 ::make array of file names in the folder
 cd "%folder%"
 set i=0

@@ -17,6 +17,10 @@ if errorlevel 1 goto renameABCD
 :renameMultiAB
 setlocal EnableDelayedExpansion
 set /p EXT=Please Enter filename Extension(example: .jpg or .tif):
+choice /C YN /M "Are you sure to rename files in folder '%folder%'?"
+if errorlevel 2 goto cancel
+if errorlevel 1 goto onRenameMultiAB
+:onRenameMultiAB
 set /a firstPage=1
 cd "%folder%"
 set i=0

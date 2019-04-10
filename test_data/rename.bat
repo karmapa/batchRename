@@ -9,17 +9,40 @@ if not exist "%folder%" (
   goto setFolder
 )
 
-choice /C abc /M "(a)a,b,c,d in one folder (b)change title and volumn in one folder (c)a,b in every sub-folder"
-if errorlevel 3 goto renameMultiAB
-if errorlevel 2 goto renameTitleVolumn
-if errorlevel 1 goto renameABCD
+:setRenameMethod
+set /p renameMethod="(A)a,b,c,d in one folder (B)change title and volume in one folder (C)a,b in every sub-folder. [A,B,C]? "
+if %renameMethod% == c goto renameMultiAB
+if %renameMethod% == C goto renameMultiAB
+if %renameMethod% == b goto renameTitleVolume
+if %renameMethod% == B goto renameTitleVolume
+if %renameMethod% == a goto renameABCD
+if %renameMethod% == A goto renameABCD
+
+echo.
+echo "Please type 'a' or 'b' or 'c' to select rename method."
+pause
+echo.
+goto setRenameMethod
 
 :renameMultiAB
 setlocal EnableDelayedExpansion
 set /p EXT=Please Enter filename Extension(example: .jpg or .tif):
-choice /C YN /M "Are you sure to rename files in folder '%folder%'?"
-if errorlevel 2 goto cancel
-if errorlevel 1 goto onRenameMultiAB
+
+:confirmRenameMultiAB
+set /p shouldRenameMultiAB="Are you sure to rename files in folder '%folder%'? [Y,N] "
+if %shouldRenameMultiAB% == n goto cancel
+if %shouldRenameMultiAB% == N goto cancel
+if %shouldRenameMultiAB% == y goto onRenameMultiAB
+if %shouldRenameMultiAB% == Y (
+  goto onRenameMultiAB
+) else (
+  echo.
+  echo "Please type 'y' or 'n' to rename files."
+  pause
+  echo.
+  goto confirmRenameMultiAB
+)
+
 :onRenameMultiAB
 set /a firstPage=1
 cd "%folder%"
@@ -44,9 +67,24 @@ echo (wrong exmaple: 1c 1d) don't key in letters
 set /p cdPages=Please key in C,D pages here:
 set /p skipPages=Which pages do you want to skip(small to large page):
 
-choice /C YN /M "Are you sure to rename files in folder '%folder%'?"
-if errorlevel 2 goto cancel
-if errorlevel 1 call :excute
+:confirmRenameABCD
+set /p shouldRenameABCD="Are you sure to rename files in folder '%folder%'? [Y,N] "
+if %shouldRenameABCD% == n goto cancel
+if %shouldRenameABCD% == N goto cancel
+if %shouldRenameABCD% == y (
+  call :excute
+  goto preCancel
+)
+if %shouldRenameABCD% == Y (
+  call :excute
+) else (
+  echo.
+  echo "Please type 'y' or 'n' to rename files."
+  pause
+  echo.
+  goto confirmRenameABCD
+)
+
 goto preCancel
 
 :excute
@@ -169,20 +207,31 @@ for /l %%a in (1,1,%filesN%) do (
 )
 Exit /b
 
-:renameTitleVolumn
+:renameTitleVolume
 set /p newTitle="Please key in new 'Title':"
-set /p newVolumn="Please key in new 'Volumn' name:"
+set /p newVolume="Please key in new 'Volume' name:"
 
-choice /C YN /M "Are you sure to rename files in folder '%folder%'?" 
-if errorlevel 2 goto cancel
-if errorlevel 1 goto excuteRenameTV
+:confirmRenameTitleVolume
+set /p shouldRenameTitleVolume="Are you sure to rename files in folder '%folder%'? [Y,N] "
+if %shouldRenameTitleVolume% == n goto cancel
+if %shouldRenameTitleVolume% == N goto cancel
+if %shouldRenameTitleVolume% == y goto excuteRenameTV
+if %shouldRenameTitleVolume% == Y (
+  goto excuteRenameTV
+) else (
+  echo.
+  echo "Please type 'y' or 'n' to rename files."
+  pause
+  echo.
+  goto confirmRenameTitleVolume
+)
 ::make array of file names in the folder
 :excuteRenameTV
 setlocal EnableDelayedExpansion
 cd "%folder%"
 for %%a in (*) do (
   set oldTVname=%%a
-  set newTVname=!oldTVname:*-=%newTitle%%newVolumn%-!
+  set newTVname=!oldTVname:*-=%newTitle%%newVolume%-!
   ren !oldTVname! !newTVname!
 )
 

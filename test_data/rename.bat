@@ -55,6 +55,8 @@ if %shouldRenameNormalNumber% == Y (
   goto confirmNormalNumberRename
 )
 
+goto preCancel
+
 :renameMultiAB
 setlocal EnableDelayedExpansion
 set /p EXT=Please Enter filename Extension(example: .jpg or .tif):

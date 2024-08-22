@@ -10,7 +10,9 @@ if not exist "%folder%" (
 )
 
 :setRenameMethod
-set /p renameMethod="(A)a,b,c,d in one folder (B)change title and volume in one folder (C)a,b in every sub-folder. [A,B,C]? "
+set /p renameMethod="(A)a,b,c,d in one folder (B)change title and volume in one folder (C)a,b in every sub-folder (D)no a,b in one folder [A,B,C,D]? "
+if %renameMethod% == d goto normalNumberRename
+if %renameMethod% == D goto normalNumberRename
 if %renameMethod% == c goto renameMultiAB
 if %renameMethod% == C goto renameMultiAB
 if %renameMethod% == b goto renameTitleVolume
@@ -19,10 +21,39 @@ if %renameMethod% == a goto renameABCD
 if %renameMethod% == A goto renameABCD
 
 echo.
-echo "Please type 'a' or 'b' or 'c' to select rename method."
+echo "Please type 'a' or 'b' or 'c' or 'd' to select rename method."
 pause
 echo.
 goto setRenameMethod
+
+:normalNumberRename
+set /p EXT=Please Enter filename Extension(example: .jpg or .tif):
+set /p titleName="Please key in 'Title':" 
+set /p volume="Please key in 'Volume' name:"
+set /a firstPage=1
+set /p firstPage="Pleade key in 'First' page number:"
+echo Please key in skipping page number from small to large
+echo (example:1 15) then these two page numbers 1 and 15 will be skipped
+echo (wrong example: 15 1) not small to large
+set /p skipPages=Which pages do you want to skip(small to large page):
+
+:confirmNormalNumberRename
+set /p shouldRenameNormalNumber="Are you sure to rename files in folder '%folder%'? [Y,N] "
+if %shouldRenameNormalNumber% == n goto cancel
+if %shouldRenameNormalNumber% == N goto cancel
+if %shouldRenameNormalNumber% == y (
+  call :excuteNormalNumberRename
+  goto preCancel
+)
+if %shouldRenameNormalNumber% == Y (
+  call :excuteNormalNumberRename
+) else (
+  echo.
+  echo "Please type 'y' or 'n' to rename files."
+  pause
+  echo.
+  goto confirmNormalNumberRename
+)
 
 :renameMultiAB
 setlocal EnableDelayedExpansion
@@ -86,6 +117,74 @@ if %shouldRenameABCD% == Y (
 )
 
 goto preCancel
+
+:excuteNormalNumberRename
+setlocal EnableDelayedExpansion
+::make array of file names in the folder
+cd "%folder%"
+set i=0
+for %%a in (*) do (
+   set /a i+=1
+   set list[!i!]=%%a
+)
+set filesN=%i%
+::make array of skipPages
+set /a skipCount=0
+
+for %%a in (%skipPages%) do (
+  if %%a geq 1 (
+    for /f "tokens=* delims=0" %%b in ("%%a") do (
+      set /a decNum2=%%b
+    )
+
+    set /a skipCount+=1
+    set skipPages[!skipCount!]=!decNum2!
+  )
+)
+
+if not defined skipPages[1] (
+  set skipPage=noPage
+) else (
+  set /a skipPageI=1
+  call set /a skipPage=%%skipPages[!skipPageI!]%%
+)
+::make array of new names
+set /a newNameI=0
+set /a countDown=%filesN%
+set /a finalPage=%firstPage%+%filesN%
+
+for /l %%a in (%firstPage%,1,%finalPage%) do (
+  if !countDown! leq 0 goto newNormalNamesMaked
+  if %%a equ !skipPage! (
+    set /a skipPageI+=1
+    if defined skipPages[!skipPageI!] (
+      call set /a skipPage=%%skipPages[!skipPageI!]%%
+    )
+  ) else (
+    set /a newNameI+=1
+    ::make a,b page names
+    if %%a lss 10 (
+      set newNames[!newNameI!]=00%%a
+    ) 
+    if %%a geq 10 (
+      if %%a lss 100 (
+        set newNames[!newNameI!]=0%%a
+      )
+    )
+    if %%a geq 100 (
+      set newNames[!newNameI!]=%%a
+    )
+    set /a countDown-=1
+  )
+)
+:newNormalNamesMaked
+
+::renameNormalNumber
+for /l %%a in (1,1,%filesN%) do (
+  set newName=!newNames[%%a]!
+  ren "!list[%%a]!" %titleName%%volume%-!newName!%EXT%
+)
+Exit /b
 
 :excute
 setlocal EnableDelayedExpansion

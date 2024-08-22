@@ -10,7 +10,7 @@ if not exist "%folder%" (
 )
 
 :setRenameMethod
-set /p renameMethod="(A)a,b,c,d in one folder (B)change title and volume in one folder (C)a,b in every sub-folder (D)no a,b in one folder [A,B,C,D]? "
+set /p renameMethod="(A)a,b,c,d in one folder (B)change title and volume in one folder (C)a,b in every sub-folder (D)No a,b in one folder [A,B,C,D]? "
 if %renameMethod% == d goto normalNumberRename
 if %renameMethod% == D goto normalNumberRename
 if %renameMethod% == c goto renameMultiAB
@@ -31,7 +31,7 @@ set /p EXT=Please Enter filename Extension(example: .jpg or .tif):
 set /p titleName="Please key in 'Title':" 
 set /p volume="Please key in 'Volume' name:"
 set /a firstPage=1
-set /p firstPage="Pleade key in 'First' page number:"
+set /p firstPage="please key in 'First' page number:"
 echo Please key in skipping page number from small to large
 echo (example:1 15) then these two page numbers 1 and 15 will be skipped
 echo (wrong example: 15 1) not small to large
@@ -92,7 +92,7 @@ set /p EXT=Please Enter filename Extension(example: .jpg or .tif):
 set /p titleName="Please key in 'Title':" 
 set /p volume="Please key in 'Volume' name:"
 set /a firstPage=1
-set /p firstPage="Pleade key in 'First' page number:"
+set /p firstPage="please key in 'First' page number:"
 echo Please key in C,D page number from small to large
 echo (example:1 15) will get 001c 001d 015c 015d
 echo (wrong example: 15 1) not small to large

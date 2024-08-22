@@ -153,7 +153,7 @@ if not defined skipPages[1] (
 ::make array of new names
 set /a newNameI=0
 set /a countDown=%filesN%
-set /a finalPage=%firstPage%+%filesN%
+set /a finalPage=%firstPage%+%filesN%+%skipCount%
 
 for /l %%a in (%firstPage%,1,%finalPage%) do (
   if !countDown! leq 0 goto newNormalNamesMaked
